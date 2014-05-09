@@ -22,8 +22,16 @@ namespace Kaedei.Danmu2Ass
 		{
 			m_engine = Python.CreateEngine();
 			Assembly assembly = GetType().Assembly;
-			var stream = assembly.GetManifestResourceStream("Kaedei.Danmu2Ass.PythonFile.Niconvert.py");
-			string sourcepy = new StreamReader(stream).ReadToEnd();
+			string sourcepy;
+			if (File.Exists("niconvert.py"))
+			{
+				sourcepy = File.ReadAllText(@"niconvert.py");
+			}
+			else
+			{
+				var stream = assembly.GetManifestResourceStream("Kaedei.Danmu2Ass.PythonFile.Niconvert.py");
+				sourcepy = new StreamReader(stream).ReadToEnd();
+			}
 			var source = m_engine.CreateScriptSourceFromString(sourcepy);
 			m_code = source.Compile();
 			m_isInitialized = true;
